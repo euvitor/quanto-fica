@@ -1,0 +1,35 @@
+### Sistema Operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+### IDEs e Editores
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+
+###  Backend
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+
+### Frontend
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/dist/
+.env*.local
+
+### Logs e Arquivos Temporários
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
