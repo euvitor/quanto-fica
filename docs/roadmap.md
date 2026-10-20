@@ -6,9 +6,11 @@ Este documento é o plano diretor do projeto **Quanto Fica**. Ele deve ser consu
 
 ## 📌 Status Geral do Projeto
 
-- **Fase Atual:** Fase 2 — Exposição REST e Validações de Entrada
+- **Fase Atual:** Fase 4 — Persistência e Compartilhamento (PostgreSQL)
 - **Progresso da Fase 1:** 100% concluído ✅
-- **Progresso da Fase 2:** 0% concluído
+- **Progresso da Fase 2:** 100% concluído ✅
+- **Progresso da Fase 3:** 100% concluído ✅
+- **Progresso da Fase 4:** 0% concluído
 
 ---
 
@@ -34,24 +36,24 @@ Este documento é o plano diretor do projeto **Quanto Fica**. Ele deve ser consu
 
 ---
 
-### 🔹 Fase 2: Exposição REST e Validações de Entrada
+### 🔹 Fase 2: Exposição REST e Validações de Entrada ✅
 > **Objetivo:** Expor a simulação via HTTP com tratamento de erros robusto.
 
-- [ ] **2.1** Criar `SimulationController` com endpoint `POST /api/v1/simulations/sac`.
-- [ ] **2.2** Configurar anotação `@Valid` e validar regra de negócio cruzada (ex: `downPayment < propertyValue`).
-- [ ] **2.3** Criar `GlobalExceptionHandler` estendendo padrão RFC 7807 (`ProblemDetail`).
-- [ ] **2.4** Escrever testes de controller com `@WebMvcTest` (testando retornos 200 e 400).
+- [x] **2.1** Criar `SimulationController` com endpoint `POST /api/v1/simulations/sac`.
+- [x] **2.2** Configurar anotação `@Valid` e validar regra de negócio cruzada (ex: `downPayment < propertyValue`).
+- [x] **2.3** Criar `GlobalExceptionHandler` estendendo padrão RFC 7807 (`ProblemDetail`).
+- [x] **2.4** Escrever testes de controller com `@WebMvcTest` (testando retornos 200 e 400).
 
 ---
 
-### 🔹 Fase 3: Módulo de Custos de Aquisição (ITBI e Cartório)
+### 🔹 Fase 3: Módulo de Custos de Aquisição (ITBI e Cartório) ✅
 > **Objetivo:** Adicionar o cálculo dos custos ocultos de compra de imóvel à vista.
 
-- [ ] **3.1** Criar DTOs para requisição e resposta de custos de aquisição.
-- [ ] **3.2** Implementar serviço de estimativa de ITBI (alíquotas municipais).
-- [ ] **3.3** Implementar serviço de cálculo de emolumentos cartorários e desconto de 50% para 1º imóvel (Art. 290 da Lei 6.015/73).
-- [ ] **3.4** Expor endpoint `POST /api/v1/simulations/acquisition-costs`.
-- [ ] **3.5** Testes unitários do módulo de custos.
+- [x] **3.1** Criar DTOs para requisição e resposta de custos de aquisição (`AcquisitionCostRequestDTO` e `AcquisitionCostResponseDTO`).
+- [x] **3.2** Implementar serviço de estimativa de ITBI (alíquotas municipais com fallback).
+- [x] **3.3** Implementar serviço de cálculo de emolumentos cartorários e desconto de 50% para 1º imóvel (Art. 290 da Lei 6.015/73).
+- [x] **3.4** Expor endpoint `POST /api/v1/simulations/acquisition-costs` no `SimulationController`.
+- [x] **3.5** Testes unitários do módulo de custos em `AcquisitionCostServiceTest` e testes web em `SimulationControllerTest`.
 
 ---
 

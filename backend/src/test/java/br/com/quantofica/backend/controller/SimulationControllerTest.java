@@ -1,9 +1,8 @@
 package br.com.quantofica.backend.controller;
 
-import br.com.quantofica.backend.dto.InstallmentDTO;
-import br.com.quantofica.backend.dto.SimulationRequestDTO;
-import br.com.quantofica.backend.dto.SimulationResponseDTO;
+import br.com.quantofica.backend.dto.*;
 import br.com.quantofica.backend.exception.GlobalExceptionHandler;
+import br.com.quantofica.backend.service.AcquisitionCostService;
 import br.com.quantofica.backend.service.SacSimulationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +31,9 @@ class SimulationControllerTest {
 
     @MockitoBean
     private SacSimulationService sacSimulationService;
+
+    @MockitoBean
+    private AcquisitionCostService acquisitionCostService;
 
     @Test
     @DisplayName("POST /api/v1/simulations/sac - Deve retornar 200 OK com simulação calculada")
@@ -128,5 +130,62 @@ class SimulationControllerTest {
                 .andExpect(jsonPath("$.title").value("Regra de negócio violada"))
                 .andExpect(jsonPath("$.detail").value("O valor de entrada deve ser menor que o valor do imóvel."))
                 .andExpect(jsonPath("$.status").value(400));
+    }
+
+    @Test
+    @DisplayName("POST /api/v1/simulations/acquisition-costs - Deve retornar 200 OK com custos calculados")
+    void shouldReturn200WhenAcquisitionCostPayloadIsValid() throws Exception {
+        AcquisitionCostResponseDTO mockCostResponse = new AcquisitionCostResponseDTO(
+                new BigDecimal("500000.00"),
+                new BigDecimal("15000.00"),
+                new BigDecimal("4200.00"),
+                new BigDecimal("3500.00"),
+                new BigDecimal("22700.00"),
+                List.of("Desconto legal de 50% nas custas cartorárias do 1º imóvel financiado (Art. 290 da Lei Federal 6.015/73)")
+        );
+
+        when(acquisitionCostService.calculate(any(AcquisitionCostRequestDTO.class))).thenReturn(mockCostResponse);
+
+        String jsonPayload = """
+                {
+                    "propertyValue": 500000.00,
+                    "state": "SP",
+                    "city": "São Paulo",
+                    "isFirstProperty": true
+                }
+                """;
+
+        mockMvc.perform(post("/api/v1/simulations/acquisition-costs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.propertyValue").value(500000.00))
+                .andExpect(jsonPath("$.itbiEstimated").value(15000.00))
+                .andExpect(jsonPath("$.registryEstimated").value(4200.00))
+                .andExpect(jsonPath("$.bankAppraisalFee").value(3500.00))
+                .andExpect(jsonPath("$.totalAcquisitionCosts").value(22700.00))
+                .andExpect(jsonPath("$.discountsApplied.length()").value(1));
+    }
+
+    @Test
+    @DisplayName("POST /api/v1/simulations/acquisition-costs - Deve retornar 400 Bad Request quando UF ou valor forem inválidos")
+    void shouldReturn400WhenAcquisitionCostPayloadIsInvalid() throws Exception {
+        // UF com mais de 2 letras e valor menor que 50k
+        String invalidPayload = """
+                {
+                    "propertyValue": 1000.00,
+                    "state": "SAO PAULO",
+                    "isFirstProperty": true
+                }
+                """;
+
+        mockMvc.perform(post("/api/v1/simulations/acquisition-costs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidPayload))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.type").value("https://quantofica.com.br/errors/bad-request"))
+                .andExpect(jsonPath("$.title").value("Dados de entrada inválidos"))
+                .andExpect(jsonPath("$.invalidParams").isArray())
+                .andExpect(jsonPath("$.invalidParams.length()").value(2));
     }
 }
