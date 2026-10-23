@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
 
     private static final URI BAD_REQUEST_TYPE = URI.create("https://quantofica.com.br/errors/bad-request");
     private static final URI BUSINESS_RULE_TYPE = URI.create("https://quantofica.com.br/errors/business-rule");
+    private static final URI NOT_FOUND_TYPE = URI.create("https://quantofica.com.br/errors/not-found");
 
     /**
      * Captura de erros de validação disparados pelo @Valid do Bean Validation (ex: campos nulos, valores mínimos).
@@ -68,5 +69,25 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
 
+    }
+
+    /**
+     * Captura recursos não encontrados (HTTP 404).
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handleResourceNotFoundException(
+            ResourceNotFoundException ex,
+            HttpServletRequest request
+    ) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+        problemDetail.setType(NOT_FOUND_TYPE);
+        problemDetail.setTitle("Recurso não encontrado");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
 }
