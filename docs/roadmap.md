@@ -6,11 +6,12 @@ Este documento é o plano diretor do projeto **Quanto Fica**. Ele deve ser consu
 
 ## 📌 Status Geral do Projeto
 
-- **Fase Atual:** Fase 4 — Persistência e Compartilhamento (PostgreSQL)
+- **Fase Atual:** Fase 5 — Frontend Interativo (Angular Moderno)
 - **Progresso da Fase 1:** 100% concluído ✅
 - **Progresso da Fase 2:** 100% concluído ✅
 - **Progresso da Fase 3:** 100% concluído ✅
-- **Progresso da Fase 4:** 0% concluído
+- **Progresso da Fase 4:** 100% concluído ✅
+- **Progresso da Fase 5:** 45% concluído 🟡
 
 ---
 
@@ -57,24 +58,30 @@ Este documento é o plano diretor do projeto **Quanto Fica**. Ele deve ser consu
 
 ---
 
-### 🔹 Fase 4: Persistência e Compartilhamento (PostgreSQL)
+### 🔹 Fase 4: Persistência e Compartilhamento (PostgreSQL) ✅
 > **Objetivo:** Permitir salvar simulações e gerar links compartilháveis para amigos e corretores.
 
-- [ ] **4.1** Modelar entidades JPA (`Simulation`, `SimulationSummary`).
-- [ ] **4.2** Configurar migrations com Flyway (versionamento do schema do banco).
-- [ ] **4.3** Criar `SimulationRepository` com Spring Data JPA.
-- [ ] **4.4** Criar endpoint `GET /api/v1/simulations/{uuid}` para consulta de simulações salvas.
+- [x] **4.1** Modelar entidade JPA `Simulation` com campos `NUMERIC(15,2)` e auditoria `@PrePersist`.
+- [x] **4.2** Configurar migrations com Flyway (`V1__create_simulations_table.sql`) e banco H2 em modo PostgreSQL para testes.
+- [x] **4.3** Criar `SimulationRepository` com Spring Data JPA.
+- [x] **4.4** Implementar `SimulationPersistenceService` orquestrando motor SAC, apuração de custos e persistência.
+- [x] **4.5** Expor endpoints RESTful:
+  - `POST /api/v1/simulations` -> `201 Created` com header `Location`.
+  - `GET /api/v1/simulations/{id}` -> `200 OK` ou `404 Not Found` (RFC 7807).
+- [x] **4.6** Testes automatizados (Unitários com Mockito e Web com `@WebMvcTest`). Suíte total: 23 testes passando.
 
 ---
 
-### 🔹 Fase 5: Frontend Interativo (Next.js)
-> **Objetivo:** Criar a interface visual para o usuário final.
+### 🔹 Fase 5: Frontend Interativo (Angular Moderno)
+> **Objetivo:** Criar uma Single Page Application moderna, responsiva e tipada com Angular (Standalone Components, Signals e Reactive Forms).
 
-- [ ] **5.1** Inicializar projeto Next.js (App Router, Tailwind CSS, TypeScript).
-- [ ] **5.2** Componente de formulário com máscaras monetárias (R$).
-- [ ] **5.3** Cards de resumo de impacto financeiro (Primeira Parcela, Última Parcela, Custo Total).
-- [ ] **5.4** Gráfico interativo (Recharts) mostrando a curva de amortização versus juros.
-- [ ] **5.5** Tabela expansível com o cronograma completo de parcelas.
+- [x] **5.1** Inicializar projeto Angular (Standalone Components, Routing, Tailwind CSS v4).
+- [x] **5.2** Modelar Interfaces TypeScript e Serviço HTTP (`SimulationService`) consumindo a API REST.
+- [x] **5.3** Formulário Reativo tipado com validações em tempo real e regras cruzadas.
+- [ ] **5.4** Componente de Cards de impacto financeiro (Primeira Parcela, Última Parcela, Custos Ocultos e Total Pago) com Signals.
+- [ ] **5.5** Gráfico interativo de amortização vs. juros (Chart.js / ng2-charts).
+- [ ] **5.6** Tabela expansível e paginada com o cronograma completo de parcelas.
+- [ ] **5.7** Funcionalidade de compartilhamento com rota dedicada `/simulacao/:id`.
 
 ---
 
@@ -82,5 +89,6 @@ Este documento é o plano diretor do projeto **Quanto Fica**. Ele deve ser consu
 > **Objetivo:** Preparar o projeto para deploy contínuo em produção.
 
 - [ ] **6.1** Criar `Dockerfile` multi-stage otimizado para a aplicação Spring Boot.
-- [ ] **6.2** Criar `docker-compose.yml` unindo Backend, Frontend e PostgreSQL.
-- [ ] **6.3** Configurar workflow do GitHub Actions para rodar testes e build a cada commit.
+- [ ] **6.2** Criar `Dockerfile` com Nginx para servir a build do Angular.
+- [ ] **6.3** Criar `docker-compose.yml` unindo Backend, Frontend e PostgreSQL.
+- [ ] **6.4** Configurar workflow do GitHub Actions para rodar testes e build a cada commit.

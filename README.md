@@ -28,16 +28,18 @@ quanto-fica/
 │   ├── domain-rules.md          # Matemática financeira (SAC/Price) e regras tributárias/cartorárias
 │   ├── api-contracts.md         # Contratos e especificações dos endpoints REST (OpenAPI/RFC 7807)
 │   └── roadmap.md               # Plano de execução faseado e checklist de progresso
-├── backend/                     # API REST em Java 21 + Spring Boot 4
-│   ├── pom.xml                  # Dependências Maven (Web, Validation, JPA, Test)
+├── backend/                     # API REST em Java 21 + Spring Boot 4 + PostgreSQL + Flyway
+│   ├── pom.xml                  # Dependências Maven (Web, Validation, JPA, Flyway, Test)
 │   └── src/
 │       ├── main/java/br/com/quantofica/backend/
 │       │   ├── dto/             # Contratos imutáveis de entrada e saída (Java Records)
-│       │   ├── service/         # Motor de cálculo financeiro (BigDecimal e regras de domínio)
-│       │   ├── controller/      # Endpoints REST expostos
+│       │   ├── model/           # Entidades JPA mapeadas (Simulation)
+│       │   ├── repository/      # Repositórios Spring Data JPA
+│       │   ├── service/         # Regras de negócio, motor SAC e orquestração de persistência
+│       │   ├── controller/      # Endpoints REST (201 Created com header Location, 200, 404)
 │       │   └── exception/       # Tratamento global de erros (ProblemDetail RFC 7807)
-│       └── test/                # Testes unitários com JUnit 5 e AssertJ
-└── frontend/                    # (Próxima fase) Aplicação Web interativa (Next.js / TypeScript)
+│       └── test/                # Suíte de testes com JUnit 5, AssertJ, Mockito e WebMvcTest
+└── frontend/                    # Single Page Application em Angular Moderno (Standalone, Signals, Tailwind)
 ```
 
 ---
@@ -48,10 +50,12 @@ quanto-fica/
 | :--- | :--- | :--- |
 | **Linguagem Backend** | Java 21 (LTS) | Suporte a Records, Pattern Matching, Virtual Threads e alta performance. |
 | **Framework Backend** | Spring Boot 4.x | Ecossistema maduro, injeção de dependências, arquitetura limpa. |
+| **Banco de Dados** | PostgreSQL 16 + Flyway | Banco relacional robusto com versionamento rigoroso de migrations DDL. |
 | **Precisão Numérica** | `java.math.BigDecimal` | Precisão arbitrária e controle estrito de arredondamento bancário (`HALF_EVEN`). |
 | **Validação** | Jakarta Validation | Fail-fast validation com anotações declarativas (`@NotNull`, `@DecimalMin`). |
-| **Testes** | JUnit 5 & AssertJ | Testes unitários determinísticos contra cenários reais de financiamento. |
-| **Frontend** *(previsto)* | Next.js, React, Tailwind, Recharts | Interface moderna, responsiva, com gráficos interativos de amortização vs. juros. |
+| **Testes Backend** | JUnit 5, AssertJ & Mockito | Testes unitários puros e testes web de integração com banco H2 em memória. |
+| **Frontend** | Angular (Moderno) + TypeScript | Standalone Components, Signals reativos, Reactive Forms e arquitetura corporativa. |
+| **Estilização** | Tailwind CSS | Design moderno, responsivo, sem overhead de CSS legado. |
 
 ---
 
