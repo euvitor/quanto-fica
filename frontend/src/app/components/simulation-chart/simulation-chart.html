@@ -1,0 +1,35 @@
+@if (simulation(); as sim) {
+  <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+
+    <!-- Cabeçalho do Gráfico -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 pb-4">
+      <div>
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">Evolução Gráfica do SAC</h3>
+        <p class="text-xs text-slate-500">
+          Entenda visualmente a queda das parcelas ao longo dos {{ sim.termMonths }} meses ({{ sim.termMonths / 12 }} anos).
+        </p>
+      </div>
+      <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 w-fit">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        Amortização Constante
+        <span class="text-slate-300">|</span>
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+        Juros Decrescentes
+      </div>
+    </div>
+
+    <!-- Container do Canvas com altura fixa responsiva -->
+    <div class="relative w-full h-72 sm:h-80">
+      <canvas #chartCanvas></canvas>
+    </div>
+
+    <!-- Rodapé Didático do Gráfico -->
+    <div class="pt-2 text-xs text-slate-500 flex items-start gap-2">
+      <span class="text-emerald-600 font-bold">💡 Análise:</span>
+      <span>
+        No início do financiamento, a maior parte da parcela é composta por <strong>juros</strong> sobre o saldo devedor. À medida que o capital é amortizado mês a mês, a parcela cai cerca de <strong>{{ ((sim.firstInstallmentAmount - sim.lastInstallmentAmount) / sim.firstInstallmentAmount) * 100 | number:'1.0-0' }}%</strong> até a quitação.
+      </span>
+    </div>
+
+  </div>
+}

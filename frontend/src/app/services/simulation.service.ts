@@ -9,19 +9,15 @@ import {
 } from '../models/simulation.model';
 
 @Injectable({
-  providedIn: 'root' // Garante que o serviço seja um Singleton disponível em toda a aplicação
+  providedIn: 'root'
 })
 export class SimulationService {
 
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/v1/simulations';
 
-  // --- Signals de Estado da Aplicação ---
-  // Armazena a simulação ativa exibida na tela
   readonly currentSimulation = signal<SavedSimulationResponse | null>(null);
-  // Controla o estado de carregamento/spinner na tela
   readonly isLoading = signal<boolean>(false);
-  // Armazena mensagens de erro para exibição ao usuário
   readonly errorMessage = signal<string | null>(null);
 
   /**
@@ -104,5 +100,12 @@ export class SimulationService {
       return error.error.title;
     }
     return 'Não foi possível conectar ao servidor. Verifique se o backend está em execução.';
+  }
+
+  /**
+   * Busca uma simulação existente pelo seu UUID para visualização compartilhada.
+   */
+  loadSimulationById(id: string): void {
+    this.getById(id).subscribe();
   }
 }
