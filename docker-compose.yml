@@ -1,0 +1,73 @@
+services:
+  # ==========================================
+  # 1. Banco de Dados PostgreSQL 16
+  # ==========================================
+  db:
+    image: postgres:16-alpine
+    container_name: quantofica-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: quantofica
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d quantofica"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - quantofica-net
+
+  # ==========================================
+  # 2. Backend Spring Boot (Java 21)
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: quantofica-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/quantofica
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgrespassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_FLYWAY_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    networks:
+      - quantofica-net
+
+  # ==========================================
+  # 3. Frontend Angular (Nginx Alpine)
+  # ==========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: quantofica-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+    networks:
+      - quantofica-net
+
+# ==========================================
+# Volumes e Redes Compartilhadas
+# ==========================================
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  quantofica-net:
+    driver: bridge
