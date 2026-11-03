@@ -27,6 +27,31 @@ O **Quanto Fica** nasceu para responder de forma clara, matemática e acessível
 
 ---
 
+## ✨ Principais Funcionalidades
+
+- 📊 **Cálculo da Curva SAC:** Amortização constante mês a mês, demonstrando a redução das parcelas e o saldo devedor ao longo dos anos.
+- 🏛️ **Estimativa de Custos de Aquisição:** Cálculo automático de ITBI (alíquotas municipais) e emolumentos de cartório/registro.
+- ⚖️ **Desconto do 1º Imóvel (Lei 6.015/73):** Opção interativa que aplica a redução legal de 50% nas taxas cartorárias para aquisições pelo SFH.
+- 📈 **Gráfico Interativo de Evolução:** Visualização dinâmica desenvolvida com Chart.js separando Parcela Total, Amortização Fixa e Juros Decrescentes.
+- 📋 **Cronograma Mês a Mês Completo:** Tabela detalhada de todas as parcelas com paginação amigável e busca rápida.
+- 🔗 **Compartilhamento com Link Único:** Geração de URL persistente via Web Share API para compartilhamento rápido no WhatsApp ou redes sociais.
+
+---
+
+## 🎨 Paleta de Cores e Identidade Visual
+
+O design do QuantoFica foi concebido sob uma estética **Fintech Minimalista**, priorizando legibilidade, contraste e clareza de dados financeiros:
+
+| Cor / Tom | Variáveis Tailwind | Aplicação Semântica |
+| :--- | :--- | :--- |
+| **Slate Neutro** | `slate-50` / `white` / `slate-900` | Fundo suave, cartões com bordas sutis (`border-slate-200/80`) e tipografia de alto contraste. |
+| **Azul Marinho** | `blue-900` / `blue-600` / `#002080` | Tom primário derivado da marca/logo; destaca a marca no cabeçalho e a linha de amortização constante no gráfico. |
+| **Esmeralda** | `emerald-600` / `emerald-50` | Elementos de quitação e saúde financeira (1ª parcela decrescente, selo de economia do 1º imóvel, botão de nova simulação). |
+| **Âmbar** | `amber-500` / `amber-600` / `amber-50` | Alertas de custos adicionais (custos à vista de ITBI/cartório e curva decrescente de juros acumulados). |
+| **Ardósia Escura** | `slate-900` / `text-white` | Card de destaque *"Custo Real Total (Tudo somado)"* e botões de chamada para ação primária. |
+
+---
+
 ## 🏗️ Arquitetura do Monorepo
 
 ```text
@@ -72,6 +97,7 @@ quanto-fica/
 | **Testes Backend** | JUnit 5, AssertJ & Mockito | 23 testes unitários e de integração web com banco H2 em memória. |
 | **Frontend** | Angular 19 (Zoneless + Signals) | Máxima performance sem Zone.js, reatividade granular com Signals e Reactive Forms. |
 | **Estilização** | Tailwind CSS v4 | Design System moderno, layout Linear Fintech Clean, responsivo e sem excessos. |
+| **Visualização de Dados** | Chart.js 4.x | Renderização precisa de curvas temporais em HTML5 Canvas responsivo. |
 | **DevOps** | Docker, Nginx, GitHub Actions | Containers enxutos em Alpine Linux, pipeline automatizado de CI/CD. |
 
 ---
@@ -88,8 +114,8 @@ docker compose up -d --build
 
 Acesse no seu navegador:
 * **Frontend Web:** [http://localhost:4200](http://localhost:4200)
-* **Backend API:** [http://localhost:8080](http://localhost:8080/api/v1/simulations)
-* **PostgreSQL:** `localhost:5432` (user: `quantofica`, pass: `quantofica`, db: `quantofica_db`)
+* **Backend API:** [http://localhost:8080/api/v1/simulations](http://localhost:8080/api/v1/simulations)
+* **PostgreSQL:** `localhost:5432` (user: `postgres`, pass: `postgrespassword`, db: `quantofica`)
 
 Para encerrar os serviços:
 ```bash
@@ -100,17 +126,18 @@ docker compose down
 
 ### Opção 2: Desenvolvimento Local Manual
 
-#### 1. Backend (Spring Boot)
+#### 1. Backend (Spring Boot - Java 21)
 ```bash
 cd backend
 ./mvnw clean test
 ./mvnw spring-boot:run
 ```
 
-#### 2. Frontend (Angular)
+#### 2. Frontend (Angular 19 - Node 22)
 ```bash
 cd frontend
 npm install
+npm test -- --watch=false
 npm start
 ```
 
@@ -118,11 +145,11 @@ npm start
 
 ## 📚 Documentação Técnica
 
-Consulte os documentos detalhados na pasta [`docs/`](file:///Users/vitor/dev/Projetos/17.quanto-fica/docs):
+Consulte os documentos detalhados na pasta [`docs/`](docs/):
 
-1. 📐 **[Regras de Negócio e Fórmulas Financeiras](file:///Users/vitor/dev/Projetos/17.quanto-fica/docs/domain-rules.md):** Fórmulas matemáticas do SAC, taxas anuais/mensais e regras cartorárias.
-2. 🔌 **[Contratos da API REST](file:///Users/vitor/dev/Projetos/17.quanto-fica/docs/api-contracts.md):** Especificação OpenAPI dos payloads e respostas RFC 7807.
-3. 🗺️ **[Roadmap de Execução](file:///Users/vitor/dev/Projetos/17.quanto-fica/docs/roadmap.md):** Histórico completo de desenvolvimento de todas as 6 fases.
+1. 📐 **[Regras de Negócio e Fórmulas Financeiras](docs/domain-rules.md):** Fórmulas matemáticas do SAC, taxas anuais/mensais e regras cartorárias.
+2. 🔌 **[Contratos da API REST](docs/api-contracts.md):** Especificação OpenAPI dos payloads e respostas RFC 7807.
+3. 🗺️ **[Roadmap de Execução](docs/roadmap.md):** Histórico completo de desenvolvimento de todas as 6 fases.
 
 ---
 
