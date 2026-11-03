@@ -1,6 +1,6 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import {
   CreateSimulationRequest,
   SavedSimulationResponse,
@@ -9,15 +9,19 @@ import {
 } from '../models/simulation.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' // Garante que o serviço seja um Singleton disponível em toda a aplicação
 })
 export class SimulationService {
 
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/v1/simulations';
 
+  // --- Signals de Estado da Aplicação ---
+  // Armazena a simulação ativa exibida na tela
   readonly currentSimulation = signal<SavedSimulationResponse | null>(null);
+  // Controla o estado de carregamento/spinner na tela
   readonly isLoading = signal<boolean>(false);
+  // Armazena mensagens de erro para exibição amigável ao usuário
   readonly errorMessage = signal<string | null>(null);
 
   /**
@@ -81,6 +85,13 @@ export class SimulationService {
   }
 
   /**
+   * Limpa manualmente a mensagem de erro atual.
+   */
+  clearError(): void {
+    this.errorMessage.set(null);
+  }
+
+  /**
    * Limpa o estado atual da simulação (para reiniciar o formulário).
    */
   reset(): void {
@@ -96,10 +107,19 @@ export class SimulationService {
     if (error?.error?.detail) {
       return error.error.detail;
     }
+    if (error?.status === 0) {
+      return 'Não foi possível conectar ao serviço de cálculo. Verifique sua conexão com a internet ou tente novamente em instantes.';
+    }
+    if (error?.status === 404) {
+      return 'A simulação solicitada não foi encontrada ou o link informado expirou.';
+    }
+    if (error?.status === 500) {
+      return 'Houve uma instabilidade momentânea no processamento dos cálculos bancários. Por favor, tente novamente.';
+    }
     if (error?.error?.title) {
       return error.error.title;
     }
-    return 'Não foi possível conectar ao servidor. Verifique se o backend está em execução.';
+    return 'Não foi possível concluir o cálculo no momento. Por favor, tente novamente.';
   }
 
   /**

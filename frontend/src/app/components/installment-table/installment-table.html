@@ -1,46 +1,45 @@
-<p>installment-table works!</p>
 @if (simulation(); as sim) {
-  <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+  <div class="bg-white p-5 sm:p-7 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
 
-    <!-- Cabeçalho -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
+    <!-- Cabeçalho da Tabela -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-5">
       <div>
-        <h3 class="text-base sm:text-lg font-bold text-slate-900">Cronograma de Parcelas Mês a Mês</h3>
-        <p class="text-xs text-slate-500">
-          Acompanhe a decomposição entre amortização, juros bancários e saldo devedor.
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Cronograma de Parcelas Mês a Mês</h3>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Detalhamento exato de cada uma das {{ sim.termMonths }} prestações do contrato.
         </p>
       </div>
 
       <!-- Resumo Rápido do Ano Selecionado -->
-      <div class="flex items-center gap-3 text-xs bg-slate-50 px-3 py-2 rounded-xl border border-slate-100 self-start sm:self-auto">
+      <div class="flex items-center gap-4 text-xs bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/60 self-start sm:self-auto">
         <div>
-          <span class="text-slate-500">Total no Ano {{ selectedYear() }}:</span>
-          <span class="font-bold text-slate-800 ml-1">R$ {{ yearTotalPaid() | number:'1.2-2' }}</span>
+          <span class="text-slate-500">Desembolso no Ano {{ selectedYear() }}:</span>
+          <span class="font-bold text-slate-900 ml-1.5 tabular-nums">R$ {{ yearTotalPaid() | number:'1.2-2' }}</span>
         </div>
         <span class="text-slate-300">|</span>
         <div>
-          <span class="text-slate-500">Juros:</span>
-          <span class="font-bold text-amber-600 ml-1">R$ {{ yearTotalInterest() | number:'1.2-2' }}</span>
+          <span class="text-slate-500">Juros Pagos no Ano:</span>
+          <span class="font-bold text-amber-600 ml-1.5 tabular-nums">R$ {{ yearTotalInterest() | number:'1.2-2' }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Seletor de Anos (Chips com Scroll Horizontal) -->
+    <!-- Seletor de Anos (Pills com Scroll Horizontal) -->
     <div>
-      <div class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider flex items-center justify-between">
-        <span>Selecione o Ano do Financiamento</span>
-        <span class="text-[11px] text-slate-400 font-normal">Ano {{ selectedYear() }} de {{ totalYears() }}</span>
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center justify-between">
+        <span>Navegar por Ano do Contrato</span>
+        <span class="text-slate-500 font-normal">Exibindo Ano {{ selectedYear() }} de {{ totalYears() }} (12 parcelas)</span>
       </div>
 
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200">
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
         @for (year of yearsList(); track year) {
           <button
             type="button"
             (click)="selectYear(year)"
-            class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer border"
             [ngClass]="selectedYear() === year
-              ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/30'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+              ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
+              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'"
           >
             Ano {{ year }}
           </button>
@@ -48,39 +47,48 @@
       </div>
     </div>
 
-    <!-- Tabela Responsiva de 12 Parcelas -->
-    <div class="overflow-x-auto rounded-xl border border-slate-200">
+    <!-- Tabela Responsiva em Largura Total -->
+    <div class="overflow-x-auto rounded-xl border border-slate-200/80">
       <table class="w-full text-left text-xs sm:text-sm border-collapse">
-        <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px] tracking-wider">
-        <tr>
-          <th class="py-3 px-3 sm:px-4">Nº Parcela</th>
-          <th class="py-3 px-3 sm:px-4 text-emerald-700">Parcela Total</th>
-          <th class="py-3 px-3 sm:px-4 text-blue-700">Amortização</th>
-          <th class="py-3 px-3 sm:px-4 text-amber-700">Juros</th>
-          <th class="py-3 px-3 sm:px-4 text-slate-700 text-right">Saldo Devedor</th>
-        </tr>
+        <thead class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px] tracking-wider">
+          <tr>
+            <th class="py-3.5 px-4">Parcela</th>
+            <th class="py-3.5 px-4 text-emerald-700">Prestação Total</th>
+            <th class="py-3.5 px-4 text-blue-700">Amortização</th>
+            <th class="py-3.5 px-4 text-amber-700">Juros</th>
+            <th class="py-3.5 px-4 text-right text-slate-700">Saldo Devedor Restante</th>
+          </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100 text-slate-700 font-mono text-xs">
+        <tbody class="divide-y divide-slate-100 text-slate-700 text-xs">
           @for (item of yearInstallments(); track item.installmentNumber) {
-            <tr class="hover:bg-slate-50/80 transition-colors">
-              <td class="py-3 px-3 sm:px-4 font-sans font-medium text-slate-900">
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 Mês {{ item.installmentNumber }}
               </td>
-              <td class="py-3 px-3 sm:px-4 font-bold text-emerald-600">
+              <td class="py-3.5 px-4 font-bold text-emerald-600 tabular-nums">
                 R$ {{ item.totalInstallmentAmount | number:'1.2-2' }}
               </td>
-              <td class="py-3 px-3 sm:px-4 text-blue-600">
+              <td class="py-3.5 px-4 text-blue-600 font-medium tabular-nums">
                 R$ {{ item.amortizationAmount | number:'1.2-2' }}
               </td>
-              <td class="py-3 px-3 sm:px-4 text-amber-600">
+              <td class="py-3.5 px-4 text-amber-600 font-medium tabular-nums">
                 R$ {{ item.interestAmount | number:'1.2-2' }}
               </td>
-              <td class="py-3 px-3 sm:px-4 text-right text-slate-600">
+              <td class="py-3.5 px-4 text-right text-slate-600 font-medium tabular-nums">
                 R$ {{ item.outstandingBalance | number:'1.2-2' }}
               </td>
             </tr>
           }
         </tbody>
+        <tfoot class="bg-slate-50 border-t border-slate-200 text-xs font-semibold text-slate-900">
+          <tr>
+            <td class="py-3 px-4">Total Ano {{ selectedYear() }}</td>
+            <td class="py-3 px-4 text-emerald-700 tabular-nums">R$ {{ yearTotalPaid() | number:'1.2-2' }}</td>
+            <td class="py-3 px-4 text-blue-700 tabular-nums">R$ {{ (sim.financedAmount / sim.termMonths * 12) | number:'1.2-2' }}</td>
+            <td class="py-3 px-4 text-amber-700 tabular-nums">R$ {{ yearTotalInterest() | number:'1.2-2' }}</td>
+            <td class="py-3 px-4 text-right text-slate-500 font-normal">--</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 

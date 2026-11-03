@@ -44,16 +44,45 @@ export class SummaryCards {
   });
 
   /**
-   * Copia o link compartilhável da simulação para a área de transferência.
+   * Compartilha a simulação via Web Share API nativa (WhatsApp, AirDrop, etc.)
+   * ou copia para a área de transferência com fallback automático.
    */
-  copyShareLink(): void {
+  async shareSimulation(): Promise<void> {
     const sim = this.simulation();
     if (!sim) return;
 
     const url = `${window.location.origin}/simulacao/${sim.id}`;
-    navigator.clipboard.writeText(url).then(() => {
+    const shareData = {
+      title: 'QuantoFica - Simulação de Financiamento SAC',
+      url
+    };
+
+    // 1. Tenta a Web Share API (sem concatenar textos para evitar corrupção de URL)
+    if (typeof navigator !== 'undefined' && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err: any) {
+        // Se o usuário cancelou o modal do SO, não faz nada
+        if (err?.name === 'AbortError') return;
+      }
+    }
+
+    // 2. Fallback: copia a URL limpa para a área de transferência
+    try {
+      await navigator.clipboard.writeText(url);
       this.copied.set(true);
       setTimeout(() => this.copied.set(false), 3000);
-    });
+    } catch {
+      // Fallback legado com input temporário
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      this.copied.set(true);
+      setTimeout(() => this.copied.set(false), 3000);
+    }
   }
 }

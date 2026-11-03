@@ -1,87 +1,236 @@
-<div class="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+<div class="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans antialiased">
 
-  <!-- Header / Barra Superior -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div
-          class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-emerald-600/30">
-          QF
+  <!-- Header / Barra Superior Fintech Minimalista -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/70 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+      <!-- Marca: Logo + Nome -->
+      <a href="/" class="flex items-center gap-3 group focus:outline-none">
+        <img
+          src="logo-icon.png"
+          alt="QuantoFica"
+          class="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+        />
+        <div class="flex items-baseline gap-2">
+          <span class="text-lg font-bold tracking-tight text-slate-900">
+            Quanto<span class="text-blue-900 font-extrabold">Fica</span>
+          </span>
+          <span class="hidden sm:inline text-xs text-slate-400 font-normal">
+            / simulador imobiliário
+          </span>
         </div>
-        <div>
-          <h1 class="text-xl font-bold tracking-tight text-slate-800 leading-tight">Quanto Fica?</h1>
-          <p class="text-xs text-slate-500 font-medium">Simulador Imobiliário SAC + Custos Ocultos</p>
-        </div>
+      </a>
+
+      <!-- Ações / Navegação Utilitária -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        @if (simulationService.currentSimulation()) {
+          <button
+            type="button"
+            (click)="onNewSimulation()"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Nova Simulação</span>
+          </button>
+        }
+
+        <a
+          href="https://github.com/euvitor/quanto-fica"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+          title="Ver no GitHub"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        </a>
       </div>
-      <div class="hidden sm:flex items-center gap-2">
-        <span
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          Java 21 + Angular 19
-        </span>
-      </div>
+
     </div>
   </header>
 
   <!-- Conteúdo Principal -->
-  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 md:py-12">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
 
     <!-- Hero / Título da Seção -->
-    <div class="mb-10 text-center max-w-2xl mx-auto">
-      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-        Planeje a compra do seu imóvel <span class="text-emerald-600">sem surpresas</span>
+    <div class="max-w-3xl">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Simule seu financiamento com <span class="text-emerald-600">precisão real</span>
       </h2>
-      <p class="mt-3 text-base text-slate-600">
-        Calcule a evolução das parcelas decrescentes no sistema SAC e descubra na hora quanto você precisará desembolsar
-        com ITBI e taxas cartorárias.
+      <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+        Calcule a curva decrescente do sistema SAC, preveja as primeiras e últimas parcelas e descubra exatamente o desembolso à vista com ITBI e taxas cartorárias.
       </p>
     </div>
 
-    <!-- Grid: Formulário + Painel de Status -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- Seção 1: Formulário de Simulação (Topo, Largura Ampla) -->
+    <section>
+      <app-simulation-form />
+    </section>
 
-      <!-- Coluna da Esquerda: Formulário de Simulação -->
-      <div class="lg:col-span-7">
-        <app-simulation-form/>
-      </div>
+    <!-- Seção 2: Resultados Analíticos ou Boas-Vindas Educativas -->
+    <section id="resultado" class="space-y-8 scroll-mt-20">
+      @if (simulationService.currentSimulation(); as sim) {
 
-      <!-- Coluna da Direita: Card Didático / Status -->
-      <div class="lg:col-span-5 space-y-6">
-
-        @if (simulationService.currentSimulation()) {
-          <app-summary-cards/>
-          <app-simulation-chart/>
-          <app-installment-table/>
-        } @else {
-          <!-- Card de Boas-Vindas Didático -->
-          <div class="bg-linear-to-br from-slate-900 to-slate-800 rounded-2xl p-6 md:p-8 text-white shadow-xl">
-            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-emerald-400 mb-4">
-              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
+        <!-- Banner de Contexto de Link Compartilhado -->
+        @if (id()) {
+          <div class="p-4 rounded-2xl bg-blue-50/80 border border-blue-200/70 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-blue-950 animate-fade-in">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                🔗
+              </div>
+              <div>
+                <span class="font-bold block text-slate-900">Simulação Carregada via Link Compartilhado</span>
+                <span class="text-slate-600 text-[11px]">Você pode visualizar todos os detalhes abaixo ou editar o formulário acima para gerar a sua versão.</span>
+              </div>
             </div>
-            <h3 class="text-lg font-bold">Por que o SAC é diferente?</h3>
-            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-              No Sistema de Amortização Constante (SAC), a amortização da dívida é idêntica em todos os meses. Como o
-              saldo devedor cai a cada mês, os juros diminuem e a sua parcela fica progressivamente mais barata até o
-              final do financiamento.
-            </p>
-            <div class="mt-6 pt-4 border-t border-white/10 text-[11px] text-slate-400">
-              💡 <strong class="text-slate-300">Custos Ocultos:</strong> Preparamos o cálculo automático de ITBI e
-              cartório com base nas tabelas estaduais e na Lei 6.015/73.
-            </div>
+            <button
+              type="button"
+              (click)="onNewSimulation()"
+              class="self-start sm:self-auto shrink-0 px-3 py-1.5 rounded-lg bg-white border border-blue-200 text-blue-800 font-semibold text-xs hover:bg-blue-100/50 transition cursor-pointer"
+            >
+              Criar Nova Simulação
+            </button>
           </div>
         }
 
-      </div>
-    </div>
+        <!-- 2.1: Cards de Métricas Principais (4 Colunas) -->
+        <app-summary-cards />
+
+        <!-- 2.2: Gráfico em Largura Ampla + Card de Inteligência Financeira -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div class="lg:col-span-8">
+            <app-simulation-chart />
+          </div>
+
+          <!-- Card Lateral de Inteligência Financeira -->
+          <div class="lg:col-span-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Análise do Financiamento</span>
+              <h4 class="text-base font-bold text-slate-900 mt-0.5">Composição do Capital</h4>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">Valor do Imóvel:</span>
+                <span class="font-bold text-slate-800 tabular-nums">R$ {{ sim.propertyValue | number:'1.2-2' }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">Total de Juros Pagos:</span>
+                <span class="font-bold text-amber-600 tabular-nums">R$ {{ sim.totalInterest | number:'1.2-2' }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">Custo Total de Parcelas:</span>
+                <span class="font-bold text-slate-800 tabular-nums">R$ {{ sim.totalPaid | number:'1.2-2' }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                <span class="text-slate-500">Custos à Vista (ITBI + Cartório):</span>
+                <span class="font-bold text-emerald-700 tabular-nums">R$ {{ sim.totalAcquisitionCosts | number:'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1.5">
+              <span class="font-semibold text-slate-800 block">💡 Por que a parcela cai?</span>
+              <p class="leading-relaxed text-[11px]">
+                No SAC, a cada mês você abate exatamente <strong class="text-slate-800">R$ {{ (sim.financedAmount / sim.termMonths) | number:'1.2-2' }}</strong> da dívida principal. Menor saldo devedor gera juros menores no mês seguinte.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2.3: Cronograma Mês a Mês em Largura Total -->
+        <app-installment-table />
+
+      } @else {
+
+        <!-- Estado Inicial: 3 Cards Educativos Clean -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Card 1 -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-base mb-4">
+              📉
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Como funciona o SAC?</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Diferente da Tabela Price (parcelas fixas), no SAC a amortização é constante mês a mês. As parcelas iniciam no valor máximo e reduzem gradualmente até a quitação.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-base mb-4">
+              🏛️
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Custos Ocultos (4% a 5%)</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Além do valor de entrada, a compra de um imóvel exige o desembolso à vista do imposto municipal (ITBI) e emolumentos de registro e escritura no cartório de imóveis.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-base mb-4">
+              ⚖️
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Desconto do 1º Imóvel</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              O Art. 290 da Lei Federal 6.015/73 concede <strong>50% de redução</strong> nas taxas de registro e cartório para quem está adquirindo o primeiro imóvel residencial pelo SFH.
+            </p>
+          </div>
+
+        </div>
+
+      }
+    </section>
 
   </main>
 
-  <!-- Rodapé -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-    Quanto Fica? — Desenvolvido com Java 21, Spring Boot 4, PostgreSQL, Flyway e Angular 19.
+  <!-- Rodapé Clean & Direto -->
+  <footer class="bg-white border-t border-slate-200/70 mt-16 text-slate-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+      <!-- Coluna 1: Marca do Projeto -->
+      <div class="space-y-1">
+        <div class="flex items-center gap-2.5">
+          <img src="logo-icon.png" alt="QuantoFica" class="h-6 w-auto" />
+          <span class="font-bold text-slate-900 tracking-tight text-sm">QuantoFica</span>
+        </div>
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Simulador independente de amortização SAC e custos de aquisição imobiliária.
+        </p>
+      </div>
+
+      <!-- Coluna 2: Seu Portfólio & Redes -->
+      <div class="flex items-center gap-3">
+        <a
+          href="https://euvitor.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 transition shadow-xs group cursor-pointer"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>euvitor.dev</span>
+          <svg class="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+
+        <!-- GitHub -->
+        <a
+          href="https://github.com/euvitor/quanto-fica"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-2 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition border border-slate-200/60 cursor-pointer"
+          title="Ver no GitHub"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        </a>
+      </div>
+    </div>
   </footer>
 
 </div>
